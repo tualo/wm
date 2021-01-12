@@ -19,6 +19,7 @@
     "require": {
         "tualo/bsc": "*",
         "tualo/cms": "*",
+        "tualo/tualopgp": "*",
         "michelf/php-markdown": "*"
     }
 }

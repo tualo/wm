@@ -2,7 +2,7 @@
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
-
+use Tualo\Office\TualoPGP\TualoApplicationPGP;
 
 class WMLoginUserNamePassword implements ICmsMiddleware{
 
