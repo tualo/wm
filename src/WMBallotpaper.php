@@ -1,6 +1,9 @@
 <?php
+namespace Tualo\Office\WM;
+use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
-class WMBallotpaper extends CMSMiddleWare{
+class WMBallotpaper implements ICmsMiddleware{
 
     public static function save(&$request,&$result){
         $db = CMSMiddlewareWMHelper::$db;

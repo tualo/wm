@@ -17,6 +17,7 @@
     },
     "minimum-stability": "dev",
     "require": {
+        "tualo/bsc": "*",
         "tualo/cms": "*",
         "michelf/php-markdown": "*"
     }

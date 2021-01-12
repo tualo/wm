@@ -1,6 +1,9 @@
 <?php
+namespace Tualo\Office\WM;
+use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
-class WMLegitimation extends CMSMiddleWare{
+class WMLegitimation implements ICmsMiddleware{
 
     public static function run(&$request,&$result){
         session_start();

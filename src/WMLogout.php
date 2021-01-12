@@ -1,6 +1,9 @@
 <?php
+namespace Tualo\Office\WM;
+use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
-class WMLogout extends CMSMiddleWare{
+class WMLogout implements ICmsMiddleware{
     public static function killSession(){
         session_start();
         unset($_SESSION['pug_session']);

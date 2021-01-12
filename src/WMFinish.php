@@ -1,6 +1,9 @@
 <?php
+namespace Tualo\Office\WM;
+use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
-class WMFinish extends CMSMiddleWare{
+class WMFinish implements ICmsMiddleware{
 
     public static function run(&$request,&$result){
         session_start();

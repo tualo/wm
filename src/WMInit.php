@@ -1,5 +1,7 @@
 <?php
+namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
 class WMInit implements ICmsMiddleware{
 

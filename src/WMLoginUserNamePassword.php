@@ -1,7 +1,10 @@
 <?php
+namespace Tualo\Office\WM;
+use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
 
-class WMLoginUserNamePassword extends CMSMiddleWare{
+class WMLoginUserNamePassword implements ICmsMiddleware{
 
     public static function loginGetCredentials($username){
         $db = CMSMiddlewareWMHelper::$db;

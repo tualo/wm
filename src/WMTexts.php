@@ -1,8 +1,12 @@
 <?php
+namespace Tualo\Office\WM;
+use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
 use Michelf\Markdown;
 use Michelf\MarkdownExtra;
-class WMTexts extends CMSMiddleWare{
+
+class WMTexts implements ICmsMiddleware{
 
     public static function run(&$request,&$result){
         session_start();
@@ -12,7 +16,7 @@ class WMTexts extends CMSMiddleWare{
         $_SESSION['pug_session']['ballotpaper_styles'] = $db->singleValue('select css from view_wm_balltopaper_colors',[],'css');
 
         $_SESSION['pug_session']['markdownhtml'] = $db->direct('select id,value_plain from wm_texts',[],'id');
-        $Parsedown = new ParsedownExtraPlugin;
+        //$Parsedown = new ParsedownExtraPlugin;
         foreach( $_SESSION['pug_session']['markdownhtml'] as $key=>$entry){
             $_SESSION['pug_session']['markdownhtml'][$key]['value_plain'] = MarkdownExtra::defaultTransform( /*$Parsedown->text(*/ $entry['value_plain'] ) /*)*/;
             if (strpos($_SESSION['pug_session']['markdownhtml'][$key]['value_plain'],"<p>")===0){

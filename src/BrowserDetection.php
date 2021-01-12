@@ -1,4 +1,5 @@
 <?php
+namespace Tualo\Office\WM;
 class BrowserDetection {
 
     private $_user_agent;
