@@ -11,10 +11,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "tualo\\Office\\WM\\": "src/"
+            "Tualo\\Office\\WM\\": "src/"
         },
         "files": ["src/functions.php"]
     },
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "tualo/cms": "*",
+        "michelf/php-markdown": "*"
+    }
 }

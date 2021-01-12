@@ -1,6 +1,6 @@
 <?php
-namespace tualo\Office\WM;
-use tualo\Office\Basic\TualoApplication;
+namespace Tualo\Office\WM;
+use Tualo\Office\Basic\TualoApplication;
 
 class WMRequestHelper {
     public static $last_error_nr = 0;

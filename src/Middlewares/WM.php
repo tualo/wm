@@ -1,10 +1,10 @@
 <?php
 
-namespace tualo\Office\WM\Middleware;
-use tualo\Office\Basic\TualoApplication as App;
-use tualo\Office\Basic\IMiddleware;
+namespace Tualo\Office\WM\Middlewares;
+use Tualo\Office\Basic\TualoApplication as App;
+use Tualo\Office\Basic\IMiddleware;
 
-class Middleware implements IMiddleware{
+class WM implements IMiddleware{
     public static function register(){
         App::use('wm',function(){
             try{
