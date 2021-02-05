@@ -2,6 +2,7 @@
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
+use Tualo\Office\DS\DSReadRoute;
 
 class WMInit implements ICmsMiddleware{
 
@@ -60,8 +61,22 @@ class WMInit implements ICmsMiddleware{
 
         
 //        $result['textvalues'] = $db->direct('select replace(system_settings_id,\'cmstext/\',\'\') id, property from system_settings where id like \'cmstext/%\' ',[],'system_settings_id');
-        
+
+
+
+
         self::_initrun($request,$result);
+
+        $stimmzettelgruppen = DSReadRoute::read($db,'stimmzettelgruppen',['shortfieldnames'=>1,'limit'=>100000]);
+        $result['stimmzettelgruppen'] = $stimmzettelgruppen['data'];
+
+        $view_website_stimmzettel = DSReadRoute::read($db,'view_website_stimmzettel',['shortfieldnames'=>1,'limit'=>100000]);
+        $result['view_website_stimmzettel'] = $view_website_stimmzettel['data'];
+
+
+        $view_website_candidates = DSReadRoute::read($db,'view_website_candidates',['shortfieldnames'=>1,'limit'=>100000]);
+        $result['view_website_candidates'] = $view_website_candidates['data'];
+
 
         try{
             $obj = new BrowserDetection();

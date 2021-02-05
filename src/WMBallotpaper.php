@@ -135,10 +135,13 @@ class WMBallotpaper implements ICmsMiddleware{
             ($_SESSION['pug_session']['ballotpaper']['interrupted']==false) 
         ){
 
-            if (!isset($_REQUEST['candidate'])) $_REQUEST['candidate'] = [];
+            if (!isset($_REQUEST['candidate'])&& ( !isset($_REQUEST['correct']) )) $_REQUEST['candidate'] = [];
 
-            $_SESSION['pug_session']['ballotpaper']['checkcount']=count($_REQUEST['candidate']);
-            $_SESSION['pug_session']['ballotpaper']['checks']=$_REQUEST['candidate'];
+            if (isset($_REQUEST['candidate'])){
+                $_SESSION['pug_session']['ballotpaper']['checkcount']=count($_REQUEST['candidate']);
+                $_SESSION['pug_session']['ballotpaper']['checks']=$_REQUEST['candidate'];
+            }
+            
             WMInit::$next_state = 'overview';
 
             if (WMBallotpaper::valid()===false){

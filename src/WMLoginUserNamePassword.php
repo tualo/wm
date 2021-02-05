@@ -168,7 +168,10 @@ class WMLoginUserNamePassword implements ICmsMiddleware{
 
                 if (self::login($username,$password)){
 
-                    $_SESSION['pug_session']['ballotpaper']=WMBallotpaper::empty( $_SESSION['pug_session']['ballotpaper_id'] );
+                    $_SESSION['pug_session']['ballotpaper'] = WMBallotpaper::empty( $_SESSION['pug_session']['ballotpaper_id'] );
+                    
+                    
+                    
                     $_SESSION['pug_session']['login']=true;
                     $_SESSION['pug_session']['error'] = [];
                     $voter = $db->direct('select session_id from voters where voter_id = {voter_id} and completed=1', ['voter_id'=>$_SESSION['pug_session']['voter_id'],'session_id'=>session_id()] );

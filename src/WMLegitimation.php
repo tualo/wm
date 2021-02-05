@@ -20,6 +20,14 @@ class WMLegitimation implements ICmsMiddleware{
             WMInit::$next_state = 'legitimation';
         }
 
+
+        if (isset($_REQUEST['asklegitimation'])&&($_REQUEST['asklegitimation']=='1')){
+            WMInit::$next_state = 'legitimation-ru-sure';
+        }
+        if (isset($_REQUEST['asklegitimation'])&&($_REQUEST['asklegitimation']=='2')){
+            WMInit::$next_state = 'legitimation';
+        }
+        
         if (
             isset($_REQUEST['vorname']) &&
             isset($_REQUEST['nachname']) &&
