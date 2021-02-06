@@ -5,13 +5,13 @@ use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 
 class WMLogout implements ICmsMiddleware{
     public static function killSession(){
-        session_start();
+        @session_start();
         unset($_SESSION['pug_session']);
         session_commit();
     }
 
     public static function run(&$request,&$result){
-        session_start();
+        @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
         if (isset($_REQUEST['logout'])&&($_REQUEST['logout']=='1')){

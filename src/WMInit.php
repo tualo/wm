@@ -56,7 +56,7 @@ class WMInit implements ICmsMiddleware{
     }
 
     public static function run(&$request,&$result){
-        session_start();
+        @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
         

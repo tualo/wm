@@ -11,7 +11,7 @@ use Michelf\MarkdownExtra;
 class WMTexts implements ICmsMiddleware{
 
     public static function run(&$request,&$result){
-        session_start();
+        @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
         $_SESSION['pug_session']['texts'] = $db->direct('select id,value_plain,value_html from wm_texts',[],'id');
