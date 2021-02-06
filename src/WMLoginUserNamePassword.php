@@ -48,9 +48,14 @@ class WMLoginUserNamePassword implements ICmsMiddleware{
     public static function login($username,$password){
         $db = CMSMiddlewareWMHelper::$db;
 
+        $times = 2;
+        if (isset( $_SESSION['pug_session']['texts']['blockcount']) ) {
+            $times = intval($_SESSION['pug_session']['texts']['blockcount']['value_plain'] );
+        }
+
         $db->direct('delete from username_count where block_until<now()');
         if (
-            $db->singleRow('select * from username_count where id = {username} and block_until>now() and num>2',['username'=>$username])!==false
+            $db->singleRow('select * from username_count where id = {username} and block_until>now() and num > '.$times,['username'=>$username])!==false
         ){
             $_SESSION['pug_session']['login']=false;
             $_SESSION['pug_session']['error'][] = " ";
@@ -136,21 +141,27 @@ class WMLoginUserNamePassword implements ICmsMiddleware{
     }
 
     public static function run(&$request,&$result){
-        session_start();
+        @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
         
         if (!isset($_SESSION['current_state'])) return;
         if (!isset($_SESSION['pug_session'])) return;
         
+        if (!isset($_SESSION['pug_session']['usernamefield'])) return;
+        if (!isset($_SESSION['pug_session']['passwordfield'])) return;
+        
         if (
-            isset($_REQUEST['p1']) &&
-            isset($_REQUEST['p2'])
+            isset($_REQUEST[$_SESSION['pug_session']['usernamefield']]) &&
+            isset($_REQUEST[$_SESSION['pug_session']['passwordfield']])
         ){
-            $_SESSION['p1'] = $_REQUEST['p1'];
-            $_SESSION['p2'] = $_REQUEST['p2'];
+            $_SESSION['p1'] = $_REQUEST[$_SESSION['pug_session']['usernamefield']];
+            $_SESSION['p2'] = $_REQUEST[$_SESSION['pug_session']['passwordfield']];
         }else if (
-            isset($_REQUEST['c']) && (strlen($_REQUEST['c'])==16)
+            isset($_REQUEST['c']) && 
+            is_string($_REQUEST['c']) && 
+            (preg_match("/[a-z0-9\-\.]+/i",$_REQUEST['c'])>0) &&
+            (strlen($_REQUEST['c'])==16)
         ){
             WMInit::$next_state = 'login';
             $_SESSION['p1'] = substr($_REQUEST['c'],0,8);
@@ -159,8 +170,8 @@ class WMLoginUserNamePassword implements ICmsMiddleware{
             $_SESSION['pug_session']['p2'] = substr($_REQUEST['c'],8,8);
         }
 
-        if ( isset($_SESSION['p1']) && isset($_SESSION['p2']) && ($_SESSION['current_state'] == 'login' )){
 
+        if ( isset($_SESSION['p1']) && isset($_SESSION['p2']) && ($_SESSION['current_state'] == 'login' ) && ( !isset($_REQUEST['asklegitimation']) )){
             if (isset($_REQUEST['accept'])){
 
                 $username = $_SESSION['p1'];
@@ -168,10 +179,7 @@ class WMLoginUserNamePassword implements ICmsMiddleware{
 
                 if (self::login($username,$password)){
 
-                    $_SESSION['pug_session']['ballotpaper'] = WMBallotpaper::empty( $_SESSION['pug_session']['ballotpaper_id'] );
-                    
-                    
-                    
+                    $_SESSION['pug_session']['ballotpaper']=WMBallotpaper::empty( $_SESSION['pug_session']['ballotpaper_id'] );
                     $_SESSION['pug_session']['login']=true;
                     $_SESSION['pug_session']['error'] = [];
                     $voter = $db->direct('select session_id from voters where voter_id = {voter_id} and completed=1', ['voter_id'=>$_SESSION['pug_session']['voter_id'],'session_id'=>session_id()] );
