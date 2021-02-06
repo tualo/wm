@@ -81,6 +81,7 @@ class WMInit implements ICmsMiddleware{
                 if (strpos(__CMS_ALLOWED_IP__, $_SERVER['REMOTE_ADDR'])===false){
                     WMInit::$next_state = 'notstarted';
                     $_SESSION['current_state']= 'notstarted';
+                    
                 }
             }
 
