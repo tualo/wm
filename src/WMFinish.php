@@ -6,7 +6,7 @@ use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 class WMFinish implements ICmsMiddleware{
 
     public static function run(&$request,&$result){
-        session_start();
+        @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
 
@@ -14,6 +14,10 @@ class WMFinish implements ICmsMiddleware{
         if (!isset($_SESSION['pug_session'])) return;
 
 
+ 
+
+        $_SESSION['pug_session']['usernamefield'] = bin2hex(random_bytes(6));
+        $_SESSION['pug_session']['passwordfield'] = bin2hex(random_bytes(6));
 
         $wm_wahlschein_register = $db->singleRow('select * from wm_loginpage_settings where id = 1',array(),'');
         $current = date('Y-m-d H:i:s',time());
@@ -32,10 +36,7 @@ class WMFinish implements ICmsMiddleware{
                 $_SESSION['pug_session']['ballotpaper']['interrupted'] == true
             ){
                 $info = $db->singleRow('select * from view_website_stimmzettel where id={id}',$_SESSION['pug_session']['ballotpaper']);
-//                session_destroy();
                 WMInit::_initrun($request,$result);
-                
-//                $_SESSION['pug_session']['login']=false;
                 $_SESSION['pug_session']['interrupted']=$info;
                 WMInit::$next_state = 'ballotpaper-interrupted';
             }
@@ -52,16 +53,6 @@ class WMFinish implements ICmsMiddleware{
         }
 
 
-        /*
-        if (    
-            isset($_SESSION['pug_session']) 
-        ){
-            $_SESSION['pug_session']['stepuuid']    = $db->singleValue('select uuid() u',[],'u');
-            $_SESSION['pug_session']['substep']     = isset($_SESSION['pug_session']['nextsubstep'])?$_SESSION['pug_session']['nextsubstep']:'';
-            $_SESSION['pug_session']['step']        = isset($_SESSION['pug_session']['nextstep'])?$_SESSION['pug_session']['nextstep']:'';
-        }
-        */
         session_commit();
-
     }
 }

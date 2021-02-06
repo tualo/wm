@@ -6,8 +6,10 @@ use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 class WMLegitimation implements ICmsMiddleware{
 
     public static function run(&$request,&$result){
-        session_start();
+        @session_start();
         $db = CMSMiddlewareWMHelper::$db;
+
+
 
 
         if (!isset($_SESSION['current_state'])) return;
@@ -17,21 +19,35 @@ class WMLegitimation implements ICmsMiddleware{
             WMInit::$next_state = 'ballotpaper';
         }
         if ( $_SESSION['current_state'] == 'legitimation-extended' ){
-            WMInit::$next_state = 'legitimation';
+            WMInit::$next_state = $db->singleValue('select value_plain from wm_texts where id=\'after_legitimation_extended_state\'',[],'value_plain');
+            if (WMInit::$next_state === false) WMInit::$next_state = 'legitimation';
         }
 
-
         if (isset($_REQUEST['asklegitimation'])&&($_REQUEST['asklegitimation']=='1')){
+            //echo '*';exit();
             WMInit::$next_state = 'legitimation-ru-sure';
         }
         if (isset($_REQUEST['asklegitimation'])&&($_REQUEST['asklegitimation']=='2')){
             WMInit::$next_state = 'legitimation';
         }
-        
+            
+
+        if (isset($_REQUEST['legitimation'])&&($_REQUEST['legitimation']=='0')){
+            WMInit::$next_state = 'legitimized-ru-sure';
+        }
+
+        if (isset($_REQUEST['legitimation'])&&($_REQUEST['legitimation']=='2')){
+            WMInit::$next_state = 'legitimation';
+        }
+
         if (
             isset($_REQUEST['vorname']) &&
             isset($_REQUEST['nachname']) &&
-            isset($_REQUEST['titel'])
+            isset($_REQUEST['titel']) &&
+
+            is_string($_REQUEST['vorname']) &&
+            is_string($_REQUEST['nachname']) &&
+            is_string($_REQUEST['titel'])
         ){
             $data = [
                 'firstname' => $_REQUEST['vorname'],
@@ -40,10 +56,12 @@ class WMLegitimation implements ICmsMiddleware{
             ];
             if (isset($_SESSION['api_url']) && isset($_SESSION['pug_session']['secret_token'])){
                 $url = $_SESSION['api_url'].'/cmp_wm_ruecklauf/api/extended/'.$_SESSION['pug_session']['secret_token'].'?extended_data='.urlencode(json_encode($data));
+
                 $object = WMRequestHelper::query($url,'./');
             }
         }
         session_commit();
+        
         
 
     }

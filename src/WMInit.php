@@ -67,6 +67,26 @@ class WMInit implements ICmsMiddleware{
 
         self::_initrun($request,$result);
 
+        if (
+            defined('__CMS_ALLOWED_IP__')
+            && (defined('__CMS_ALLOWED_IP_REDIRECT__'))
+            && (defined('__CMS_ALLOWED_IP_FIELD__'))
+        ){
+            if(isset( $_SERVER[__CMS_ALLOWED_IP_FIELD__] )){
+                if (strpos(__CMS_ALLOWED_IP__, $_SERVER[__CMS_ALLOWED_IP_FIELD__])===false){
+                    WMInit::$next_state = 'notstarted';
+                    $_SESSION['current_state']= 'notstarted';
+                }
+            }else{
+                if (strpos(__CMS_ALLOWED_IP__, $_SERVER['REMOTE_ADDR'])===false){
+                    WMInit::$next_state = 'notstarted';
+                    $_SESSION['current_state']= 'notstarted';
+                }
+            }
+
+        }
+
+
         $stimmzettelgruppen = DSReadRoute::read($db,'stimmzettelgruppen',['shortfieldnames'=>1,'limit'=>100000]);
         $result['stimmzettelgruppen'] = $stimmzettelgruppen['data'];
 
