@@ -2,6 +2,7 @@
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
+use Tualo\Office\Basic\TualoApplication;
 
 class WMBallotpaper implements ICmsMiddleware{
 
@@ -122,6 +123,7 @@ class WMBallotpaper implements ICmsMiddleware{
         @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
+        TualoApplication::timing("WMBallotpaper start");
         
         if (!isset($_SESSION['current_state'])) return;
         if (!isset($_SESSION['pug_session'])) return;

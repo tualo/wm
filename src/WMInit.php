@@ -3,6 +3,7 @@ namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
 use Tualo\Office\DS\DSReadRoute;
+use Tualo\Office\Basic\TualoApplication;
 
 class WMInit implements ICmsMiddleware{
 
@@ -56,12 +57,14 @@ class WMInit implements ICmsMiddleware{
     }
 
     public static function run(&$request,&$result){
+        TualoApplication::timing("WMInit start 0");
         @session_start();
         $db = CMSMiddlewareWMHelper::$db;
 
         
 //        $result['textvalues'] = $db->direct('select replace(system_settings_id,\'cmstext/\',\'\') id, property from system_settings where id like \'cmstext/%\' ',[],'system_settings_id');
 
+        TualoApplication::timing("WMInit start 1");
 
 
 
@@ -81,23 +84,31 @@ class WMInit implements ICmsMiddleware{
                 if (strpos(__CMS_ALLOWED_IP__, $_SERVER['REMOTE_ADDR'])===false){
                     WMInit::$next_state = 'notstarted';
                     $_SESSION['current_state']= 'notstarted';
-                    
+
                 }
             }
 
         }
+        TualoApplication::timing("WMInit __CMS_ALLOWED_IP__");
 
 
-        $stimmzettelgruppen = DSReadRoute::read($db,'stimmzettelgruppen',['shortfieldnames'=>1,'limit'=>100000]);
-        $result['stimmzettelgruppen'] = $stimmzettelgruppen['data'];
+        // $stimmzettelgruppen =  DSReadRoute::read($db,'stimmzettelgruppen',['shortfieldnames'=>1,'limit'=>100000]);
+        // $result['stimmzettelgruppen'] = $stimmzettelgruppen['data'];
 
-        $view_website_stimmzettel = DSReadRoute::read($db,'view_website_stimmzettel',['shortfieldnames'=>1,'limit'=>100000]);
-        $result['view_website_stimmzettel'] = $view_website_stimmzettel['data'];
+        $result['stimmzettelgruppen'] = $db->direct('select * from stimmzettelgruppen');
+        TualoApplication::timing("WMInit sqls");
 
+        //$view_website_stimmzettel = DSReadRoute::read($db,'view_website_stimmzettel',['shortfieldnames'=>1,'limit'=>100000]);
+        //$result['view_website_stimmzettel'] = $view_website_stimmzettel['data'];
+        $result['view_website_stimmzettel'] = $db->direct('select * from view_website_stimmzettel');
 
-        $view_website_candidates = DSReadRoute::read($db,'view_website_candidates',['shortfieldnames'=>1,'limit'=>100000]);
-        $result['view_website_candidates'] = $view_website_candidates['data'];
+        TualoApplication::timing("WMInit sqls");
 
+        //$view_website_candidates = DSReadRoute::read($db,'view_website_candidates',['shortfieldnames'=>1,'limit'=>100000]);
+        //$result['view_website_candidates'] = $view_website_candidates['data'];
+        $result['view_website_candidates'] = $db->direct('select * from view_website_candidates');
+
+        TualoApplication::timing("WMInit sqls");
 
         try{
             $obj = new BrowserDetection();
@@ -134,7 +145,8 @@ class WMInit implements ICmsMiddleware{
             
         }
             
-        
+        TualoApplication::timing("WMInit browser");
+
 
         //Google Chrome
         //echo $obj->detect()->getInfo();
@@ -144,6 +156,7 @@ class WMInit implements ICmsMiddleware{
         $_SESSION['pug_session']['error'] = [];
 
         session_commit();
-        
+        TualoApplication::timing("WMInit session_commit");
+
     }
 }

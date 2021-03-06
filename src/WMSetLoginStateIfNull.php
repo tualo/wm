@@ -1,10 +1,12 @@
 <?php
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
+use Tualo\Office\Basic\TualoApplication;
 
 class WMSetLoginStateIfNull implements ICmsMiddleware{
     public static function run(&$request,&$result){
         @session_start();
+        TualoApplication::timing("WMSetLoginStateIfNull start");
         if (!isset($_SESSION['current_state'])) $_SESSION['current_state']='';
 
         if ( $_SESSION['current_state']=='' ) {

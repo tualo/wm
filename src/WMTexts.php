@@ -2,6 +2,7 @@
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
+use Tualo\Office\Basic\TualoApplication;
 
 
 
@@ -13,6 +14,7 @@ class WMTexts implements ICmsMiddleware{
     public static function run(&$request,&$result){
         @session_start();
         $db = CMSMiddlewareWMHelper::$db;
+        TualoApplication::timing("WMTexts start");
 
         $_SESSION['pug_session']['texts'] = $db->direct('select id,value_plain,value_html from wm_texts',[],'id');
         $_SESSION['pug_session']['ballotpaper_styles'] = $db->singleValue('select css from view_wm_balltopaper_colors',[],'css');

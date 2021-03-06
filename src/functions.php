@@ -13,3 +13,4 @@ if (class_exists("Tualo\Office\WM\WMLogout")){ }
 if (class_exists("Tualo\Office\WM\WMSetLoginStateIfNull")){ }
 if (class_exists("Tualo\Office\WM\WMTexts")){ }
 
+class WMLogout extends Tualo\Office\WM\WMLogout{}

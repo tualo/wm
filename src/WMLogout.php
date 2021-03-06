@@ -2,6 +2,7 @@
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
+use Tualo\Office\Basic\TualoApplication;
 
 class WMLogout implements ICmsMiddleware{
     public static function killSession(){
@@ -13,6 +14,7 @@ class WMLogout implements ICmsMiddleware{
     public static function run(&$request,&$result){
         @session_start();
         $db = CMSMiddlewareWMHelper::$db;
+        TualoApplication::timing("WMLogout start");
 
         if (isset($_REQUEST['logout'])&&($_REQUEST['logout']=='1')){
             $result = [];

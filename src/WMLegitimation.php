@@ -2,6 +2,7 @@
 namespace Tualo\Office\WM;
 use Tualo\Office\CMS\ICmsMiddleware;
 use Tualo\Office\CMS\CMSMiddlewareWMHelper;
+use Tualo\Office\Basic\TualoApplication;
 
 class WMLegitimation implements ICmsMiddleware{
 
@@ -10,6 +11,7 @@ class WMLegitimation implements ICmsMiddleware{
         $db = CMSMiddlewareWMHelper::$db;
 
 
+        TualoApplication::timing("WMLegitimation start");
 
 
         if (!isset($_SESSION['current_state'])) return;
