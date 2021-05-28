@@ -6,6 +6,7 @@ use Tualo\Office\Basic\IRoute;
 
 
 class Route implements IRoute{
+    
     public static function register(){
         BasicRoute::add('/wm/(?P<file>[\/.\w\d\-\_]+)'.'.js',function($matches){
             if (file_exists( dirname(__DIR__).'/js/'.$matches['file'].'.js') ){
